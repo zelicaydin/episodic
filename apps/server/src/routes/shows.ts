@@ -1,13 +1,14 @@
 import { Hono } from "hono";
 import type { Dbs } from "../db.js";
 import { buildShowDetails } from "../show-details.js";
+import { isTconst } from "../tconst.js";
 
 export function showsRoutes(dbs: Dbs, getTmdb: (tconst: string) => Promise<{ poster: string | null; overview: string | null }>): Hono {
   const app = new Hono();
   app.get("/:tconst", async (c) => {
     if (dbs.imdb === null) return c.json({ error: "not_ingested" }, 503);
     const tconst = c.req.param("tconst");
-    if (!/^tt\d+$/.test(tconst)) return c.json({ error: "not_found" }, 404);
+    if (!isTconst(tconst)) return c.json({ error: "not_found" }, 404);
     const details = buildShowDetails(dbs, tconst, await getTmdb(tconst));
     if (details === null) return c.json({ error: "not_found" }, 404);
     const now = new Date().toISOString();
