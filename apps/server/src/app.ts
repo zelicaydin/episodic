@@ -14,8 +14,8 @@ export function createApp(dbs: Dbs, opts: AppOptions = {}): Hono {
   const app = new Hono();
   app.route("/api/status", statusRoutes(dbs));
   app.route("/api/search", searchRoutes(dbs));
-  app.route("/api/trending", trendingRoutes(dbs));
   const getPosters = makePosterResolver(dbs.user, opts.fetchImpl ?? fetch);
+  app.route("/api/trending", trendingRoutes(dbs, getPosters));
   app.route("/api/shows", showsRoutes(dbs, getPosters));
   app.route("/api/compare", compareRoutes(dbs, getPosters));
   app.route("/api/my", myRoutes(dbs, getPosters));

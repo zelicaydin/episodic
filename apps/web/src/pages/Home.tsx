@@ -4,6 +4,7 @@ import { ApiError, getRecentlyViewed, getStatus, getTrending } from "../api";
 import { SearchBox } from "../components/SearchBox";
 import { ShowCard } from "../components/ShowCard";
 import { SetupCard } from "../components/SetupCard";
+import { PosterBackdrop } from "../components/PosterBackdrop";
 
 export function Home() {
   const [searchNotIngested, setSearchNotIngested] = useState(false);
@@ -15,12 +16,17 @@ export function Home() {
     [trending.error, recent.error].some((e) => e instanceof ApiError && e.code === "not_ingested");
   if (notIngested) return <SetupCard />;
 
+  const heroPosters = (trending.data ?? []).map((s) => s.poster).filter((p): p is string => p !== null).slice(0, 10);
+
   return (
     <div>
-      <div className="mt-10 mb-12 flex flex-col items-center gap-4 text-center">
-        <h1 className="logo text-4xl font-bold">Episodic</h1>
-        <p style={{ color: "var(--muted)" }}>Every episode, scored.</p>
-        <SearchBox autoFocus onNotIngested={() => setSearchNotIngested(true)} />
+      <div className="relative mt-10 mb-12">
+        <PosterBackdrop posters={heroPosters} />
+        <div className="relative flex flex-col items-center gap-4 py-10 text-center">
+          <h1 className="logo text-4xl font-bold">Episodic</h1>
+          <p style={{ color: "var(--muted)" }}>Every episode, scored.</p>
+          <SearchBox autoFocus onNotIngested={() => setSearchNotIngested(true)} />
+        </div>
       </div>
       <h2 className="mb-3 text-lg font-semibold">Trending</h2>
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">

@@ -1,5 +1,5 @@
 import type {
-  StatusResponse, SearchResult, ShowDetails, CompareResponse, MyShowEntry, OkResponse,
+  StatusResponse, SearchResult, ShowDetails, CompareResponse, MyShowEntry, OkResponse, TrendingEntry,
 } from "@episodic/shared";
 
 export class ApiError extends Error {
@@ -23,7 +23,7 @@ const jsonInit = (method: string, body?: unknown): RequestInit => ({
 
 export const getStatus = () => req<StatusResponse>("/api/status");
 export const search = (q: string) => req<SearchResult[]>(`/api/search?q=${encodeURIComponent(q)}`);
-export const getTrending = () => req<SearchResult[]>("/api/trending");
+export const getTrending = () => req<TrendingEntry[]>("/api/trending");
 export const getShow = (tconst: string) => req<ShowDetails>(`/api/shows/${tconst}`);
 export const getCompare = (a: string, b: string) =>
   req<CompareResponse>(`/api/compare?a=${encodeURIComponent(a)}&b=${encodeURIComponent(b)}`);

@@ -18,7 +18,7 @@ function Shell() {
         </div>
       </nav>
       <main className="flex-1 px-6 py-6 max-w-6xl mx-auto w-full"><Outlet /></main>
-      <footer className="px-6 py-4 text-xs border-t" style={{ color: "var(--muted)", borderColor: "var(--border)" }}>
+      <footer className="px-6 py-4 text-center text-[11px] border-t" style={{ color: "var(--muted)", borderColor: "var(--border)" }}>
         <p>Information courtesy of IMDb (https://www.imdb.com). Used with permission.</p>
         <p>Show artwork and summaries from TVmaze.com.</p>
         {status.data?.datasetDate && <p>Ratings as of {status.data.datasetDate}</p>}

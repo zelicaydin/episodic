@@ -6,7 +6,7 @@ function stubFetch(overrides: Record<string, unknown> = {}) {
   const routes: Record<string, unknown> = {
     "/api/status": { ingested: true, datasetDate: "2026-08-10", showCount: 2, episodeCount: 8 },
     "/api/trending": [
-      { tconst: "tt10", title: "Fake Show", startYear: 2010, endYear: 2015, rating: 8.9, votes: 120000 },
+      { tconst: "tt10", title: "Fake Show", startYear: 2010, endYear: 2015, rating: 8.9, votes: 120000, poster: "https://m/poster.jpg" },
     ],
     "/api/my/recently-viewed": [],
     "/api/search": [
@@ -29,6 +29,15 @@ describe("Home", () => {
     renderApp("/");
     expect(await screen.findByText("Fake Show")).toBeDefined();
     expect(screen.getByText("Trending")).toBeDefined();
+  });
+  it("renders trending poster art", async () => {
+    renderApp("/");
+    await screen.findByText("Fake Show");
+    expect(document.querySelector('img[src="https://m/poster.jpg"]')).not.toBeNull();
+  });
+  it("renders the hero poster backdrop", async () => {
+    renderApp("/");
+    expect(await screen.findByTestId("poster-backdrop")).toBeDefined();
   });
   it("search dropdown appears after typing", async () => {
     renderApp("/");

@@ -4,6 +4,8 @@ export interface SearchResult {
   rating: number | null; votes: number;
 }
 
+export interface TrendingEntry extends SearchResult { poster: string | null; }
+
 export interface EpisodeCell {
   tconst: string; season: number; episode: number;
   title: string | null; rating: number | null; votes: number;

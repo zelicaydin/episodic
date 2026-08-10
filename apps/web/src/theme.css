@@ -13,3 +13,13 @@ body {
 }
 
 .logo { font-family: Georgia, serif; color: var(--gold); letter-spacing: 0.5px; }
+
+.backdrop-poster {
+  opacity: 0.16;
+  animation: drift 26s ease-in-out infinite alternate;
+}
+
+@keyframes drift {
+  from { translate: 0 0; }
+  to { translate: 0 -28px; }
+}
