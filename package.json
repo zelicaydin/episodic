@@ -1,0 +1,14 @@
+{
+  "name": "scoretrack",
+  "private": true,
+  "workspaces": ["apps/*", "packages/*", "scripts/*"],
+  "scripts": {
+    "dev": "concurrently -n server,web \"npm:dev -w apps/server\" \"npm:dev -w apps/web\"",
+    "build": "npm run build -w apps/web",
+    "start": "NODE_ENV=production npm run start -w apps/server",
+    "ingest": "npm run ingest -w scripts/ingest",
+    "test": "npm test -ws --if-present",
+    "typecheck": "tsc -p packages/shared && tsc -p scripts/ingest && tsc -p apps/server && tsc -p apps/web"
+  },
+  "devDependencies": { "concurrently": "^9", "typescript": "^5.6" }
+}
