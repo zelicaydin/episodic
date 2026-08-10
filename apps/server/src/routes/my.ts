@@ -3,6 +3,7 @@ import type { MyShowEntry, OkResponse, SearchResult } from "@episodic/shared";
 import type { Dbs } from "../db.js";
 import { buildShowDetails } from "../show-details.js";
 import { toSearchResult } from "./search.js";
+import { isTconst } from "../tconst.js";
 
 const OK: OkResponse = { ok: true };
 
@@ -29,6 +30,7 @@ export function myRoutes(dbs: Dbs, getTmdb: (tconst: string) => Promise<{ poster
 
   app.post("/shows/:tconst", (c) => {
     const tconst = c.req.param("tconst");
+    if (!isTconst(tconst)) return c.json({ error: "bad_request" }, 400);
     const count = dbs.imdb === null ? 0 : (dbs.imdb.prepare(
       "SELECT COUNT(*) c FROM episodes WHERE parent_tconst = ? AND season IS NOT NULL AND episode IS NOT NULL",
     ).get(tconst) as { c: number }).c;
@@ -40,23 +42,31 @@ export function myRoutes(dbs: Dbs, getTmdb: (tconst: string) => Promise<{ poster
   });
 
   app.delete("/shows/:tconst", (c) => {
-    dbs.user.prepare("DELETE FROM saved_shows WHERE tconst = ?").run(c.req.param("tconst"));
+    const tconst = c.req.param("tconst");
+    if (!isTconst(tconst)) return c.json({ error: "bad_request" }, 400);
+    dbs.user.prepare("DELETE FROM saved_shows WHERE tconst = ?").run(tconst);
     return c.json(OK);
   });
 
   app.put("/watched/:ep", (c) => {
+    const ep = c.req.param("ep");
+    if (!isTconst(ep)) return c.json({ error: "bad_request" }, 400);
     dbs.user.prepare(
       "INSERT INTO watched VALUES (?, datetime('now')) ON CONFLICT(episode_tconst) DO NOTHING",
-    ).run(c.req.param("ep"));
+    ).run(ep);
     return c.json(OK);
   });
 
   app.delete("/watched/:ep", (c) => {
-    dbs.user.prepare("DELETE FROM watched WHERE episode_tconst = ?").run(c.req.param("ep"));
+    const ep = c.req.param("ep");
+    if (!isTconst(ep)) return c.json({ error: "bad_request" }, 400);
+    dbs.user.prepare("DELETE FROM watched WHERE episode_tconst = ?").run(ep);
     return c.json(OK);
   });
 
   app.put("/ratings/:tconst", async (c) => {
+    const tconst = c.req.param("tconst");
+    if (!isTconst(tconst)) return c.json({ error: "bad_request" }, 400);
     const body = await c.req.json().catch(() => null) as { rating?: unknown } | null;
     const r = body?.rating;
     if (typeof r !== "number" || !Number.isInteger(r) || r < 1 || r > 10) {
@@ -65,7 +75,7 @@ export function myRoutes(dbs: Dbs, getTmdb: (tconst: string) => Promise<{ poster
     dbs.user.prepare(
       "INSERT INTO my_ratings VALUES (?, ?, datetime('now')) " +
       "ON CONFLICT(tconst) DO UPDATE SET rating = excluded.rating, rated_at = excluded.rated_at",
-    ).run(c.req.param("tconst"), r);
+    ).run(tconst, r);
     return c.json(OK);
   });
 

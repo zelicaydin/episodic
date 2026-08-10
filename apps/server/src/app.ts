@@ -7,11 +7,13 @@ import { showsRoutes } from "./routes/shows.js";
 import { compareRoutes } from "./routes/compare.js";
 import { myRoutes } from "./routes/my.js";
 import { makePosterResolver } from "./posters.js";
+import { localOnly } from "./security.js";
 
 export interface AppOptions { fetchImpl?: typeof fetch; }
 
 export function createApp(dbs: Dbs, opts: AppOptions = {}): Hono {
   const app = new Hono();
+  app.use("*", localOnly());
   app.route("/api/status", statusRoutes(dbs));
   app.route("/api/search", searchRoutes(dbs));
   const getPosters = makePosterResolver(dbs.user, opts.fetchImpl ?? fetch);

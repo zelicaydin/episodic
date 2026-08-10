@@ -15,5 +15,5 @@ if (process.env.NODE_ENV === "production") {
   app.get("*", serveStatic({ path: "../web/dist/index.html" }));
 }
 
-serve({ fetch: app.fetch, port: 3001 });
+serve({ fetch: app.fetch, port: 3001, hostname: "127.0.0.1" });
 console.log("Episodic server on http://localhost:3001");
