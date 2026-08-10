@@ -26,4 +26,23 @@ describe("makeTmdbResolver", () => {
     const resolve = makeTmdbResolver(fixtureDbs().user, "k", fetchImpl as unknown as typeof fetch);
     expect(await resolve("tt10")).toEqual({ poster: null, overview: null });
   });
+  it("does not cache non-ok responses", async () => {
+    const dbs = fixtureDbs();
+    const fetchImpl = vi.fn(async () => new Response("err", { status: 500 }));
+    const resolve = makeTmdbResolver(dbs.user, "k", fetchImpl as unknown as typeof fetch);
+    expect(await resolve("tt10")).toEqual({ poster: null, overview: null });
+    expect(await resolve("tt10")).toEqual({ poster: null, overview: null });
+    expect(fetchImpl).toHaveBeenCalledTimes(2);
+    expect(dbs.user.prepare("SELECT COUNT(*) c FROM tmdb_cache").get()).toEqual({ c: 0 });
+  });
+  it("refetches after the cache entry expires", async () => {
+    const dbs = fixtureDbs();
+    const stale = new Date(Date.now() - 8 * 24 * 3600 * 1000).toISOString();
+    dbs.user.prepare("INSERT INTO tmdb_cache VALUES ('find:tt10', ?, ?)")
+      .run(JSON.stringify({ poster: null, overview: null }), stale);
+    const fetchImpl = vi.fn(async () => new Response(JSON.stringify(payload)));
+    const resolve = makeTmdbResolver(dbs.user, "k", fetchImpl as unknown as typeof fetch);
+    expect(await resolve("tt10")).toEqual({ poster: "https://image.tmdb.org/t/p/w342/abc.jpg", overview: "A drama." });
+    expect(fetchImpl).toHaveBeenCalledTimes(1);
+  });
 });

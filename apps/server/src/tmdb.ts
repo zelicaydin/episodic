@@ -28,11 +28,11 @@ export function makeTmdbResolver(
             overview: tv.overview ?? null,
           };
         }
+        user.prepare(
+          "INSERT INTO tmdb_cache VALUES (?, ?, ?) " +
+          "ON CONFLICT(cache_key) DO UPDATE SET json = excluded.json, fetched_at = excluded.fetched_at",
+        ).run(cacheKey, JSON.stringify(info), new Date().toISOString());
       }
-      user.prepare(
-        "INSERT INTO tmdb_cache VALUES (?, ?, ?) " +
-        "ON CONFLICT(cache_key) DO UPDATE SET json = excluded.json, fetched_at = excluded.fetched_at",
-      ).run(cacheKey, JSON.stringify(info), new Date().toISOString());
     } catch {
       // offline or TMDB down: serve without posters, do not cache the failure
     }
