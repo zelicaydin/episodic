@@ -25,8 +25,12 @@ export const getStatus = () => req<StatusResponse>("/api/status");
 export const search = (q: string) => req<SearchResult[]>(`/api/search?q=${encodeURIComponent(q)}`);
 export const getTrending = () => req<TrendingEntry[]>("/api/trending");
 export const getShow = (tconst: string) => req<ShowDetails>(`/api/shows/${tconst}`);
-export const getCompare = (a: string, b: string) =>
-  req<CompareResponse>(`/api/compare?a=${encodeURIComponent(a)}&b=${encodeURIComponent(b)}`);
+export const getCompare = (a: string | null, b: string | null) => {
+  const qs = new URLSearchParams();
+  if (a) qs.set("a", a);
+  if (b) qs.set("b", b);
+  return req<CompareResponse>(`/api/compare?${qs.toString()}`);
+};
 export const getMyShows = () => req<MyShowEntry[]>("/api/my/shows");
 export const getRecentlyViewed = () => req<SearchResult[]>("/api/my/recently-viewed");
 export const saveShow = (t: string) => req<OkResponse>(`/api/my/shows/${t}`, jsonInit("POST"));
