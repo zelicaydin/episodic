@@ -45,7 +45,6 @@ export interface CompareResponse { a: ShowDetails; b: ShowDetails; }
 export interface StatusResponse {
   ingested: boolean; datasetDate: string | null;
   showCount: number; episodeCount: number;
-  tmdbConfigured: boolean;
 }
 
 export interface MyShowEntry {

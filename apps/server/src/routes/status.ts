@@ -2,12 +2,12 @@ import { Hono } from "hono";
 import type { StatusResponse } from "@episodic/shared";
 import type { Dbs } from "../db.js";
 
-export function statusRoutes(dbs: Dbs, tmdbConfigured: boolean): Hono {
+export function statusRoutes(dbs: Dbs): Hono {
   const app = new Hono();
   app.get("/", (c) => {
     if (dbs.imdb === null) {
       const body: StatusResponse = {
-        ingested: false, datasetDate: null, showCount: 0, episodeCount: 0, tmdbConfigured,
+        ingested: false, datasetDate: null, showCount: 0, episodeCount: 0,
       };
       return c.json(body);
     }
@@ -20,7 +20,6 @@ export function statusRoutes(dbs: Dbs, tmdbConfigured: boolean): Hono {
       datasetDate: meta.get("dataset_date") ?? null,
       showCount: Number(meta.get("show_count") ?? 0),
       episodeCount: Number(meta.get("episode_count") ?? 0),
-      tmdbConfigured,
     };
     return c.json(body);
   });

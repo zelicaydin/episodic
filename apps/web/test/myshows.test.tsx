@@ -35,7 +35,7 @@ describe("My Shows", () => {
   it("shows an error message when loading fails", async () => {
     vi.stubGlobal("fetch", vi.fn(async (url: string) => {
       if (String(url).includes("/api/my/shows")) return new Response("boom", { status: 500 });
-      return new Response(JSON.stringify({ ingested: true, datasetDate: null, showCount: 0, episodeCount: 0, tmdbConfigured: false }));
+      return new Response(JSON.stringify({ ingested: true, datasetDate: null, showCount: 0, episodeCount: 0 }));
     }));
     renderApp("/my");
     expect(await screen.findByText(/could not load your shows/i)).toBeDefined();

@@ -5,7 +5,7 @@ import { renderApp } from "./helpers";
 beforeEach(() => {
   vi.stubGlobal("fetch", vi.fn(async (url: string) => {
     if (String(url).includes("/api/status")) {
-      return new Response(JSON.stringify({ ingested: true, datasetDate: "2026-08-10", showCount: 1, episodeCount: 1, tmdbConfigured: false }));
+      return new Response(JSON.stringify({ ingested: true, datasetDate: "2026-08-10", showCount: 1, episodeCount: 1 }));
     }
     return new Response(JSON.stringify([]));
   }));
@@ -17,7 +17,6 @@ describe("App shell", () => {
     expect(screen.getByRole("link", { name: "Episodic" })).toBeDefined();
     expect(screen.getByRole("link", { name: "My Shows" })).toBeDefined();
     expect(await screen.findByText(/Information courtesy of IMDb/)).toBeDefined();
-    expect(screen.getByText(/not endorsed or certified by TMDB/)).toBeDefined();
-    expect(await screen.findByText(/Posters are off/)).toBeDefined();
+    expect(screen.getByText(/Show artwork and summaries from TVmaze\.com/)).toBeDefined();
   });
 });

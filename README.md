@@ -38,9 +38,7 @@ dataset gets committed.
 1. `npm install`
 2. `npm run ingest` (downloads the IMDb datasets and builds `data/imdb.db`,
    takes a few minutes depending on your connection)
-3. `cp .env.example .env` and add a TMDB API key if you want posters (see
-   below; optional, everything else works without it)
-4. `npm run dev` starts the API server and the web app together
+3. `npm run dev` starts the API server and the web app together
 
 ### Re-running ingest
 
@@ -57,17 +55,6 @@ The double `--` is needed because `ingest` at the root is itself an `npm
 run` that forwards into `scripts/ingest`; the first `--` gets consumed by
 the outer npm and the second one carries `--cached` through to the actual
 script.
-
-### TMDB API key (optional, for posters)
-
-Show posters come from TMDB. To enable them:
-
-1. Create a free account at [themoviedb.org](https://www.themoviedb.org).
-2. Go to Settings, then API, and request a key (the "API Read Access Token"
-   or v3 API key both work).
-3. Put it in `.env` as `TMDB_API_KEY=your-key-here`.
-
-Without a key, Episodic works the same way, just without poster images.
 
 ## Running in production
 
@@ -93,4 +80,4 @@ Both run across every workspace (`packages/shared`, `scripts/ingest`,
 ## Data & attribution
 
 Information courtesy of IMDb (https://www.imdb.com). Used with permission.
-This product uses the TMDB API but is not endorsed or certified by TMDB.
+Show artwork and summaries courtesy of TVmaze.com, licensed under CC BY-SA.

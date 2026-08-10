@@ -45,7 +45,7 @@ describe("Home", () => {
     const oldPromise = new Promise<Response>((res) => { resolveOld = res; });
     vi.stubGlobal("fetch", vi.fn(async (url: string) => {
       const u = String(url);
-      if (u.includes("/api/status")) return new Response(JSON.stringify({ ingested: true, datasetDate: null, showCount: 1, episodeCount: 1, tmdbConfigured: false }));
+      if (u.includes("/api/status")) return new Response(JSON.stringify({ ingested: true, datasetDate: null, showCount: 1, episodeCount: 1 }));
       if (u.includes("/api/search")) {
         if (u.includes("old")) return oldPromise;
         return new Response(JSON.stringify([{ tconst: "tt2", title: "New Show", startYear: 2020, endYear: 2020, rating: 8, votes: 10 }]));
@@ -65,7 +65,7 @@ describe("Home", () => {
   it("shows setup card when search reports not ingested", async () => {
     vi.stubGlobal("fetch", vi.fn(async (url: string) => {
       const u = String(url);
-      if (u.includes("/api/status")) return new Response(JSON.stringify({ ingested: true, datasetDate: null, showCount: 0, episodeCount: 0, tmdbConfigured: false }));
+      if (u.includes("/api/status")) return new Response(JSON.stringify({ ingested: true, datasetDate: null, showCount: 0, episodeCount: 0 }));
       if (u.includes("/api/search")) return new Response(JSON.stringify({ error: "not_ingested" }), { status: 503 });
       return new Response(JSON.stringify([]));
     }));

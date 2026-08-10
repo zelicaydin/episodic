@@ -58,7 +58,7 @@ describe("Show page", () => {
     vi.stubGlobal("fetch", vi.fn(async (url: string) => {
       const u = String(url);
       if (u.includes("/api/shows/")) return new Response(JSON.stringify({ error: "not_ingested" }), { status: 503 });
-      if (u.includes("/api/status")) return new Response(JSON.stringify({ ingested: false, datasetDate: null, showCount: 0, episodeCount: 0, tmdbConfigured: false }));
+      if (u.includes("/api/status")) return new Response(JSON.stringify({ ingested: false, datasetDate: null, showCount: 0, episodeCount: 0 }));
       return new Response(JSON.stringify([]));
     }));
     renderApp("/show/tt10");
@@ -68,7 +68,7 @@ describe("Show page", () => {
     vi.stubGlobal("fetch", vi.fn(async (url: string) => {
       const u = String(url);
       if (u.includes("/api/shows/")) return new Response(JSON.stringify({ error: "not_found" }), { status: 404 });
-      if (u.includes("/api/status")) return new Response(JSON.stringify({ ingested: true, datasetDate: null, showCount: 1, episodeCount: 1, tmdbConfigured: false }));
+      if (u.includes("/api/status")) return new Response(JSON.stringify({ ingested: true, datasetDate: null, showCount: 1, episodeCount: 1 }));
       return new Response(JSON.stringify([]));
     }));
     renderApp("/show/ttX");
@@ -78,7 +78,7 @@ describe("Show page", () => {
     vi.stubGlobal("fetch", vi.fn(async (url: string) => {
       const u = String(url);
       if (u.includes("/api/shows/")) return new Response("boom", { status: 500 });
-      if (u.includes("/api/status")) return new Response(JSON.stringify({ ingested: true, datasetDate: null, showCount: 1, episodeCount: 1, tmdbConfigured: false }));
+      if (u.includes("/api/status")) return new Response(JSON.stringify({ ingested: true, datasetDate: null, showCount: 1, episodeCount: 1 }));
       return new Response(JSON.stringify([]));
     }));
     renderApp("/show/tt10");
@@ -89,7 +89,7 @@ describe("Show page", () => {
     vi.stubGlobal("fetch", vi.fn(async (url: string) => {
       const u = String(url);
       if (u.includes("/api/shows/tt10")) return new Response(JSON.stringify(saved));
-      if (u.includes("/api/status")) return new Response(JSON.stringify({ ingested: true, datasetDate: null, showCount: 1, episodeCount: 4, tmdbConfigured: false }));
+      if (u.includes("/api/status")) return new Response(JSON.stringify({ ingested: true, datasetDate: null, showCount: 1, episodeCount: 4 }));
       if (u.includes("/api/my/")) return new Response(JSON.stringify({ ok: true }));
       return new Response(JSON.stringify([]));
     }));
@@ -113,7 +113,7 @@ describe("Show page", () => {
         const d = { ...details, seasons: s0 ? [{ ...s0, episodes: s0.episodes.map((e, i) => i === 0 ? { ...e, watched } : e) }] : [] };
         return new Response(JSON.stringify(d));
       }
-      if (u.includes("/api/status")) return new Response(JSON.stringify({ ingested: true, datasetDate: null, showCount: 1, episodeCount: 4, tmdbConfigured: false }));
+      if (u.includes("/api/status")) return new Response(JSON.stringify({ ingested: true, datasetDate: null, showCount: 1, episodeCount: 4 }));
       return new Response(JSON.stringify([]));
     }));
     renderApp("/show/tt10");
