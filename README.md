@@ -6,9 +6,9 @@ show comparison, and watch tracking. Runs locally.
 ## Features
 
 - **Episode ratings grid**: every season laid out as a grid of episode cells,
-  colored by rating tier (from disaster-red through violet, amber, and up to
-  glowing green for the best episodes) so you can spot a show's peaks and
-  slumps at a glance.
+  colored by rating tier (from violet for historic disasters under 5, through
+  magenta, red, and amber, up through greens to a standout bright green for
+  9.5 and higher) so you can spot a show's peaks and slumps at a glance.
 - **Insights and verdicts**: season averages, a weighted show rating, the
   peak and worst episodes, the most consistent season, and a one-line verdict
   that calls out things like a steady climb, a golden era, or a season where
