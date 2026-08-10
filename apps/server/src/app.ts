@@ -5,6 +5,7 @@ import { searchRoutes } from "./routes/search.js";
 import { trendingRoutes } from "./routes/trending.js";
 import { showsRoutes } from "./routes/shows.js";
 import { compareRoutes } from "./routes/compare.js";
+import { myRoutes } from "./routes/my.js";
 
 export interface AppOptions { tmdbKey?: string | null; fetchImpl?: typeof fetch; }
 
@@ -17,7 +18,7 @@ export function createApp(dbs: Dbs, opts: AppOptions = {}): Hono {
   const noTmdb = async () => ({ poster: null, overview: null });
   app.route("/api/shows", showsRoutes(dbs, noTmdb));
   app.route("/api/compare", compareRoutes(dbs, noTmdb));
-  // Task 12 adds: app.route("/api/my", ...)
+  app.route("/api/my", myRoutes(dbs, noTmdb));
   // Guard used by data routes when imdb.db is missing:
   return app;
 }
