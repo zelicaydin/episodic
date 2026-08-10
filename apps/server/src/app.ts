@@ -20,6 +20,5 @@ export function createApp(dbs: Dbs, opts: AppOptions = {}): Hono {
   app.route("/api/shows", showsRoutes(dbs, getTmdb));
   app.route("/api/compare", compareRoutes(dbs, getTmdb));
   app.route("/api/my", myRoutes(dbs, getTmdb));
-  // Guard used by data routes when imdb.db is missing:
   return app;
 }

@@ -13,7 +13,13 @@ function loadEnv(): Record<string, string> {
   const out: Record<string, string> = {};
   for (const line of readFileSync(p, "utf8").split("\n")) {
     const m = line.match(/^([A-Z0-9_]+)=(.*)$/);
-    if (m) out[m[1] as string] = (m[2] as string).trim();
+    if (m) {
+      let v = (m[2] as string).trim();
+      if ((v.startsWith('"') && v.endsWith('"')) || (v.startsWith("'") && v.endsWith("'"))) {
+        v = v.slice(1, -1);
+      }
+      out[m[1] as string] = v;
+    }
   }
   return out;
 }

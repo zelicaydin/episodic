@@ -32,9 +32,12 @@ export function makeTmdbResolver(
           "INSERT INTO tmdb_cache VALUES (?, ?, ?) " +
           "ON CONFLICT(cache_key) DO UPDATE SET json = excluded.json, fetched_at = excluded.fetched_at",
         ).run(cacheKey, JSON.stringify(info), new Date().toISOString());
+      } else {
+        console.warn(`tmdb lookup failed for ${tconst}: HTTP ${res.status}`);
       }
-    } catch {
+    } catch (err) {
       // offline or TMDB down: serve without posters, do not cache the failure
+      console.warn(`tmdb lookup failed for ${tconst}:`, err instanceof Error ? err.message : err);
     }
     return info;
   };

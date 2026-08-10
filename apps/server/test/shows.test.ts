@@ -27,6 +27,10 @@ describe("GET /api/shows/:tconst", () => {
     const res = await createApp(fixtureDbs()).request("/api/shows/tt404");
     expect(res.status).toBe(404);
   });
+  it("rejects malformed ids without calling tmdb", async () => {
+    const res = await createApp(fixtureDbs()).request("/api/shows/junk");
+    expect(res.status).toBe(404);
+  });
   it("records the view in recently_viewed", async () => {
     const dbs = fixtureDbs();
     await createApp(dbs).request("/api/shows/tt10");

@@ -7,6 +7,7 @@ export function showsRoutes(dbs: Dbs, getTmdb: (tconst: string) => Promise<{ pos
   app.get("/:tconst", async (c) => {
     if (dbs.imdb === null) return c.json({ error: "not_ingested" }, 503);
     const tconst = c.req.param("tconst");
+    if (!/^tt\d+$/.test(tconst)) return c.json({ error: "not_found" }, 404);
     const details = buildShowDetails(dbs, tconst, await getTmdb(tconst));
     if (details === null) return c.json({ error: "not_found" }, 404);
     const now = new Date().toISOString();

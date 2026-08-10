@@ -4,6 +4,7 @@ import { getMyShows } from "../api";
 
 export function MyShows() {
   const q = useQuery({ queryKey: ["myShows"], queryFn: getMyShows });
+  if (q.error) return <p className="mt-10 text-center" style={{ color: "var(--bad)" }}>Could not load your shows.</p>;
   if (q.data === undefined) return <p style={{ color: "var(--muted)" }}>Loading...</p>;
   if (q.data.length === 0) {
     return <p className="mt-10 text-center" style={{ color: "var(--muted)" }}>
