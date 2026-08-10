@@ -42,4 +42,14 @@ describe("GET /api/shows/:tconst", () => {
     expect(b.myRating).toBe(9);
     expect(b.watchedCount).toBe(1);
   });
+  it("updates saved show open tracking on view", async () => {
+    const dbs = fixtureDbs();
+    dbs.user.prepare("INSERT INTO saved_shows VALUES ('tt10', datetime('now'), NULL, 2)").run();
+    await createApp(dbs).request("/api/shows/tt10");
+    const row = dbs.user.prepare(
+      "SELECT last_opened_at, episode_count_at_last_open FROM saved_shows WHERE tconst='tt10'",
+    ).get() as { last_opened_at: string | null; episode_count_at_last_open: number };
+    expect(row.last_opened_at).not.toBeNull();
+    expect(row.episode_count_at_last_open).toBe(4);
+  });
 });
