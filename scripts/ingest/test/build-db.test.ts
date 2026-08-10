@@ -93,4 +93,17 @@ describe("buildDatabase", () => {
     const db = new Database(out, { readonly: true });
     expect(db.prepare("SELECT value FROM meta WHERE key='dataset_date'").get()).toEqual({ value: "2026-08-10" });
   });
+
+  it("cleans up tmp and preserves the previous db on failure", async () => {
+    const dir = mkdtempSync(join(tmpdir(), "st-"));
+    const out = join(dir, "imdb.db");
+    const f = fixtures(dir);
+    await buildDatabase(f, out, "2026-08-09");
+    await expect(
+      buildDatabase({ ...f, ratings: join(dir, "missing.tsv.gz") }, out, "2026-08-10"),
+    ).rejects.toThrow();
+    expect(existsSync(out + ".tmp")).toBe(false);
+    const db = new Database(out, { readonly: true });
+    expect(db.prepare("SELECT value FROM meta WHERE key='dataset_date'").get()).toEqual({ value: "2026-08-09" });
+  });
 });

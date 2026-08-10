@@ -19,14 +19,21 @@ export function toFloat(v: string | null): number | null {
 }
 
 export async function* tsvRows(filePath: string): AsyncGenerator<(string | null)[]> {
+  const stream = createReadStream(filePath);
+  const gunzip = stream.pipe(createGunzip());
   const rl = createInterface({
-    input: createReadStream(filePath).pipe(createGunzip()),
+    input: gunzip,
     crlfDelay: Infinity,
   });
+  let streamError: Error | null = null;
+  stream.on('error', (err) => { streamError = err; rl.close(); });
+  gunzip.on('error', (err) => { streamError = err; rl.close(); });
   let first = true;
   for await (const line of rl) {
+    if (streamError) throw streamError;
     if (first) { first = false; continue; }
     if (line.length === 0) continue;
     yield parseTsvLine(line);
   }
+  if (streamError) throw streamError;
 }
