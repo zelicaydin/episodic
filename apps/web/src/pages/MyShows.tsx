@@ -11,7 +11,9 @@ export function MyShows() {
       Nothing saved yet. Find a show and hit Save.</p>;
   }
   return (
-    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    <div>
+      <h1 className="mb-4 text-lg font-semibold">My Shows</h1>
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {q.data.map((s) => (
         <Link key={s.tconst} to={`/show/${s.tconst}`} className="flex gap-4 rounded-lg p-4 hover:brightness-125"
           style={{ background: "var(--surface)" }}>
@@ -33,6 +35,7 @@ export function MyShows() {
           </div>
         </Link>
       ))}
+      </div>
     </div>
   );
 }

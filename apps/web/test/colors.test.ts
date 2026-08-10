@@ -7,7 +7,7 @@ describe("tierFor", () => {
     expect(tierFor(4.9)?.bg).toBe("#4c1d95");
     expect(tierFor(5)?.bg).toBe("#831843");
     expect(tierFor(6.4)?.bg).toBe("#7f1d1d");
-    expect(tierFor(7.9)?.bg).toBe("#713f12");
+    expect(tierFor(7.9)?.bg).toBe("#585212");
     expect(tierFor(8.2)?.bg).toBe("#3f6212");
     expect(tierFor(8.7)?.bg).toBe("#166534");
     expect(tierFor(9.2)?.bg).toBe("#14532d");

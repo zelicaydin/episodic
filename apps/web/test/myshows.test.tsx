@@ -21,6 +21,7 @@ describe("My Shows", () => {
   it("renders cards with progress and new-episode badge", async () => {
     renderApp("/my");
     expect(await screen.findByText("Fake Show")).toBeDefined();
+    expect(screen.getByRole("heading", { name: "My Shows" })).toBeDefined();
     expect(screen.getByText(/watched 3\/4/)).toBeDefined();
     expect(screen.getByText(/2 new/)).toBeDefined();
   });
