@@ -12,9 +12,11 @@ export function SearchBox({ autoFocus = false, onNotIngested, onPick }: Props) {
   const [sel, setSel] = useState(0);
   const nav = useNavigate();
   const seq = useRef(0);
+  const suppressSearch = useRef(false);
 
   useEffect(() => {
     const mySeq = ++seq.current;
+    if (suppressSearch.current) { suppressSearch.current = false; return; }
     if (q.trim() === "") { setResults([]); setOpen(false); return; }
     const timer = setTimeout(async () => {
       try {
@@ -32,7 +34,14 @@ export function SearchBox({ autoFocus = false, onNotIngested, onPick }: Props) {
 
   function pick(r: SearchResult) {
     setOpen(false);
-    if (onPick) { setQ(r.title); onPick(r); return; }
+    setResults([]);
+    if (onPick) {
+      // filling the input must not count as new typing, or the dropdown reopens
+      suppressSearch.current = true;
+      setQ(r.title);
+      onPick(r);
+      return;
+    }
     setQ(""); nav(`/show/${r.tconst}`);
   }
 
