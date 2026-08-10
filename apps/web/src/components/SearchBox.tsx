@@ -1,27 +1,34 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import type { SearchResult } from "@scoretrack/shared";
-import { search } from "../api";
+import { ApiError, search } from "../api";
 
-export function SearchBox({ autoFocus = false }: { autoFocus?: boolean }) {
+interface Props { autoFocus?: boolean; onNotIngested?: () => void; }
+
+export function SearchBox({ autoFocus = false, onNotIngested }: Props) {
   const [q, setQ] = useState("");
   const [results, setResults] = useState<SearchResult[]>([]);
   const [open, setOpen] = useState(false);
   const [sel, setSel] = useState(0);
   const nav = useNavigate();
-  const timer = useRef<ReturnType<typeof setTimeout>>();
+  const seq = useRef(0);
 
   useEffect(() => {
-    clearTimeout(timer.current);
+    const mySeq = ++seq.current;
     if (q.trim() === "") { setResults([]); setOpen(false); return; }
-    timer.current = setTimeout(async () => {
+    const timer = setTimeout(async () => {
       try {
         const r = await search(q);
+        if (seq.current !== mySeq) return;
         setResults(r); setOpen(true); setSel(0);
-      } catch { setResults([]); }
+      } catch (err) {
+        if (seq.current !== mySeq) return;
+        setResults([]);
+        if (err instanceof ApiError && err.code === "not_ingested") onNotIngested?.();
+      }
     }, 200);
-    return () => clearTimeout(timer.current);
-  }, [q]);
+    return () => clearTimeout(timer);
+  }, [q, onNotIngested]);
 
   function pick(r: SearchResult) { setOpen(false); setQ(""); nav(`/show/${r.tconst}`); }
 
