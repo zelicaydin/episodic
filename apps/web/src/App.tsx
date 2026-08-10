@@ -4,6 +4,7 @@ import { getStatus } from "./api";
 import { Home } from "./pages/Home";
 import { Show } from "./pages/Show";
 import { Compare } from "./pages/Compare";
+import { MyShows } from "./pages/MyShows";
 
 function Shell() {
   const status = useQuery({ queryKey: ["status"], queryFn: getStatus });
@@ -36,7 +37,7 @@ export default function App() {
         <Route path="/" element={<Home />} />
         <Route path="/show/:tconst" element={<Show />} />
         <Route path="/compare" element={<Compare />} />
-        <Route path="/my" element={<div>My Shows</div>} />
+        <Route path="/my" element={<MyShows />} />
       </Route>
     </Routes>
   );
