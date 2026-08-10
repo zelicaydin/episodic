@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { screen } from "@testing-library/react";
+import { screen, fireEvent } from "@testing-library/react";
 import type { ShowDetails } from "@episodic/shared";
 import { renderApp } from "./helpers";
 
@@ -27,7 +27,15 @@ beforeEach(() => {
   vi.stubGlobal("fetch", vi.fn(async (url: string) => {
     const u = String(url);
     if (u.includes("/api/compare")) {
-      return new Response(JSON.stringify({ a: mkShow("tt10", "Fake Show"), b: mkShow("tt30", "Tiny Gem") }));
+      return new Response(JSON.stringify({
+        a: { ...mkShow("tt10", "Fake Show"), poster: "https://m/fake.jpg" },
+        b: mkShow("tt30", "Tiny Gem"),
+      }));
+    }
+    if (u.includes("/api/search")) {
+      return new Response(JSON.stringify([
+        { tconst: "tt30", title: "Tiny Gem", startYear: 2020, endYear: 2020, rating: 8.6, votes: 900 },
+      ]));
     }
     if (u.includes("/api/status")) return new Response(JSON.stringify({ ingested: true, datasetDate: "2026-08-10", showCount: 2, episodeCount: 4 }));
     return new Response(JSON.stringify([]));
@@ -45,5 +53,20 @@ describe("Compare page", () => {
   it("asks for two shows when params missing", async () => {
     renderApp("/compare");
     expect(await screen.findByText(/pick two shows/i)).toBeDefined();
+  });
+  it("shows poster art in the stat strip when available", async () => {
+    renderApp("/compare?a=tt10&b=tt30");
+    await screen.findByText("Fake Show");
+    expect(document.querySelector('img[src="https://m/fake.jpg"]')).not.toBeNull();
+  });
+  it("closes the dropdown after picking a result and does not reopen it", async () => {
+    renderApp("/compare");
+    const input = screen.getAllByPlaceholderText(/search/i)[0] as HTMLInputElement;
+    fireEvent.change(input, { target: { value: "tiny" } });
+    const option = await screen.findByRole("button", { name: /Tiny Gem/ });
+    fireEvent.click(option);
+    expect(input.value).toBe("Tiny Gem");
+    await new Promise((r) => setTimeout(r, 350));
+    expect(screen.queryByRole("button", { name: /Tiny Gem/ })).toBeNull();
   });
 });
