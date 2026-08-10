@@ -1,4 +1,4 @@
-import type { ShowDetails } from "@scoretrack/shared";
+import type { ShowDetails } from "@episodic/shared";
 import { formatWatchTime } from "../lib/format";
 import { VerdictBox } from "./VerdictBox";
 

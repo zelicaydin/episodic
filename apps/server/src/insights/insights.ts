@@ -1,4 +1,4 @@
-import type { SeasonGrid, EpisodeCell, EpisodeRef, Insights } from "@scoretrack/shared";
+import type { SeasonGrid, EpisodeCell, EpisodeRef, Insights } from "@episodic/shared";
 
 export function seasonAverage(episodes: EpisodeCell[]): number | null {
   const rated = episodes.filter((e) => e.rating !== null);

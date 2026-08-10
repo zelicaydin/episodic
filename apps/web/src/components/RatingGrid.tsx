@@ -1,4 +1,4 @@
-import type { EpisodeCell, SeasonGrid } from "@scoretrack/shared";
+import type { EpisodeCell, SeasonGrid } from "@episodic/shared";
 import { RatingCell } from "./RatingCell";
 
 interface Props {

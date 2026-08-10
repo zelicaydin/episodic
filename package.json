@@ -1,5 +1,5 @@
 {
-  "name": "scoretrack",
+  "name": "episodic",
   "private": true,
   "workspaces": ["apps/*", "packages/*", "scripts/*"],
   "scripts": {

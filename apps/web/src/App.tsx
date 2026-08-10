@@ -11,7 +11,7 @@ function Shell() {
   return (
     <div className="min-h-screen flex flex-col">
       <nav className="flex items-center justify-between px-6 py-4 border-b" style={{ borderColor: "var(--border)" }}>
-        <Link to="/" className="logo text-xl font-bold">ScoreTrack</Link>
+        <Link to="/" className="logo text-xl font-bold">Episodic</Link>
         <div className="flex gap-5 text-sm" style={{ color: "var(--muted)" }}>
           <Link to="/my" className="hover:text-white">My Shows</Link>
           <Link to="/compare" className="hover:text-white">Compare</Link>

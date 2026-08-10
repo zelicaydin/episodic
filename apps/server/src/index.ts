@@ -35,4 +35,4 @@ if (process.env.NODE_ENV === "production") {
 }
 
 serve({ fetch: app.fetch, port: 3001 });
-console.log("ScoreTrack server on http://localhost:3001");
+console.log("Episodic server on http://localhost:3001");

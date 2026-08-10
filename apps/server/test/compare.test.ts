@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import type { CompareResponse } from "@scoretrack/shared";
+import type { CompareResponse } from "@episodic/shared";
 import { createApp } from "../src/app.js";
 import { fixtureDbs } from "./fixtures.js";
 

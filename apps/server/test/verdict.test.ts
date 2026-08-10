@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import type { Insights } from "@scoretrack/shared";
+import type { Insights } from "@episodic/shared";
 import { pickVerdict } from "../src/insights/verdict.js";
 
 function base(over: Partial<Omit<Insights, "verdict">>): Omit<Insights, "verdict"> {

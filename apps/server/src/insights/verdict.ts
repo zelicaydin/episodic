@@ -1,4 +1,4 @@
-import type { Insights } from "@scoretrack/shared";
+import type { Insights } from "@episodic/shared";
 
 type Signals = Omit<Insights, "verdict">;
 

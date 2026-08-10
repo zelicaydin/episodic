@@ -1,5 +1,5 @@
 import type { Dbs } from "./db.js";
-import type { EpisodeCell, SeasonGrid, ShowDetails } from "@scoretrack/shared";
+import type { EpisodeCell, SeasonGrid, ShowDetails } from "@episodic/shared";
 import { computeInsights, seasonAverage } from "./insights/insights.js";
 import { pickVerdict } from "./insights/verdict.js";
 

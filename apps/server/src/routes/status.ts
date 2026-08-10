@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-import type { StatusResponse } from "@scoretrack/shared";
+import type { StatusResponse } from "@episodic/shared";
 import type { Dbs } from "../db.js";
 
 export function statusRoutes(dbs: Dbs, tmdbConfigured: boolean): Hono {

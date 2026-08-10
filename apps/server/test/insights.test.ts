@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import type { SeasonGrid, EpisodeCell } from "@scoretrack/shared";
+import type { SeasonGrid, EpisodeCell } from "@episodic/shared";
 import { computeInsights, seasonAverage } from "../src/insights/insights.js";
 
 let n = 0;

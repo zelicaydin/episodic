@@ -1,4 +1,4 @@
-# ScoreTrack
+# Episodic
 
 Personal TV app: per-episode IMDb ratings as a color-coded grid, with verdicts,
 show comparison, and watch tracking. Runs locally.
@@ -21,7 +21,7 @@ show comparison, and watch tracking. Runs locally.
 
 ## The two databases
 
-ScoreTrack keeps ratings data and personal data in separate SQLite files
+Episodic keeps ratings data and personal data in separate SQLite files
 under `data/`:
 
 - `data/imdb.db` holds show and episode data built from the public IMDb
@@ -67,7 +67,7 @@ Show posters come from TMDB. To enable them:
    or v3 API key both work).
 3. Put it in `.env` as `TMDB_API_KEY=your-key-here`.
 
-Without a key, ScoreTrack works the same way, just without poster images.
+Without a key, Episodic works the same way, just without poster images.
 
 ## Running in production
 

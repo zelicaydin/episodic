@@ -18,7 +18,7 @@ export function Home() {
   return (
     <div>
       <div className="mt-10 mb-12 flex flex-col items-center gap-4 text-center">
-        <h1 className="logo text-4xl font-bold">ScoreTrack</h1>
+        <h1 className="logo text-4xl font-bold">Episodic</h1>
         <p style={{ color: "var(--muted)" }}>Every episode, scored.</p>
         <SearchBox autoFocus onNotIngested={() => setSearchNotIngested(true)} />
       </div>

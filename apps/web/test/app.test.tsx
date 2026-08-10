@@ -14,7 +14,7 @@ beforeEach(() => {
 describe("App shell", () => {
   it("renders nav and attribution footer", async () => {
     renderApp("/");
-    expect(screen.getByRole("link", { name: "ScoreTrack" })).toBeDefined();
+    expect(screen.getByRole("link", { name: "Episodic" })).toBeDefined();
     expect(screen.getByRole("link", { name: "My Shows" })).toBeDefined();
     expect(await screen.findByText(/Information courtesy of IMDb/)).toBeDefined();
     expect(screen.getByText(/not endorsed or certified by TMDB/)).toBeDefined();

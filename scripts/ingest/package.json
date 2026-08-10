@@ -1,5 +1,5 @@
 {
-  "name": "@scoretrack/ingest",
+  "name": "@episodic/ingest",
   "private": true,
   "type": "module",
   "scripts": {

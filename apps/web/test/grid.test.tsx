@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
-import type { SeasonGrid } from "@scoretrack/shared";
+import type { SeasonGrid } from "@episodic/shared";
 import { RatingGrid } from "../src/components/RatingGrid";
 
 const seasons: SeasonGrid[] = [

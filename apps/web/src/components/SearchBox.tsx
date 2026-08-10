@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import type { SearchResult } from "@scoretrack/shared";
+import type { SearchResult } from "@episodic/shared";
 import { ApiError, search } from "../api";
 
 interface Props { autoFocus?: boolean; onNotIngested?: () => void; onPick?: (r: SearchResult) => void; }

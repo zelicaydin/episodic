@@ -1,6 +1,6 @@
 import type {
   StatusResponse, SearchResult, ShowDetails, CompareResponse, MyShowEntry, OkResponse,
-} from "@scoretrack/shared";
+} from "@episodic/shared";
 
 export class ApiError extends Error {
   constructor(public status: number, public code: string) { super(code); }

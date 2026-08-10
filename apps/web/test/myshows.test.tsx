@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { screen } from "@testing-library/react";
-import type { MyShowEntry } from "@scoretrack/shared";
+import type { MyShowEntry } from "@episodic/shared";
 import { renderApp } from "./helpers";
 
 const entries: MyShowEntry[] = [

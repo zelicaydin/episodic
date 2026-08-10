@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-import type { SearchResult } from "@scoretrack/shared";
+import type { SearchResult } from "@episodic/shared";
 import type { Dbs } from "../db.js";
 
 interface ShowRow {

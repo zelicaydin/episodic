@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { screen } from "@testing-library/react";
-import type { ShowDetails } from "@scoretrack/shared";
+import type { ShowDetails } from "@episodic/shared";
 import { renderApp } from "./helpers";
 
 function mkShow(tconst: string, title: string): ShowDetails {

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import type { EpisodeCell, ShowDetails } from "@scoretrack/shared";
+import type { EpisodeCell, ShowDetails } from "@episodic/shared";
 import { ApiError, getShow, saveShow, setMyRating, setWatched, unsaveShow } from "../api";
 import { ShowHeader } from "../components/ShowHeader";
 import { RatingGrid } from "../components/RatingGrid";

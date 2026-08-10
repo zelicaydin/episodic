@@ -1,4 +1,4 @@
-import type { ShowDetails } from "@scoretrack/shared";
+import type { ShowDetails } from "@episodic/shared";
 import { VerdictBox } from "./VerdictBox";
 
 function Row({ label, children }: { label: string; children: React.ReactNode }) {

@@ -1,2 +1,2 @@
-{ "name": "@scoretrack/shared", "version": "0.0.0", "type": "module",
+{ "name": "@episodic/shared", "version": "0.0.0", "type": "module",
   "exports": { ".": "./src/index.ts" } }

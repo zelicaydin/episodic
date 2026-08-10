@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import type { SearchResult } from "@scoretrack/shared";
+import type { SearchResult } from "@episodic/shared";
 
 export function ShowCard({ show }: { show: SearchResult }) {
   return (

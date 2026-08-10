@@ -1,4 +1,4 @@
-import type { EpisodeCell } from "@scoretrack/shared";
+import type { EpisodeCell } from "@episodic/shared";
 import { tierFor } from "../lib/colors";
 
 interface Props { ep: EpisodeCell; watchMode: boolean; onToggleWatched: (ep: EpisodeCell) => void; }

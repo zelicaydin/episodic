@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-import type { MyShowEntry, OkResponse, SearchResult } from "@scoretrack/shared";
+import type { MyShowEntry, OkResponse, SearchResult } from "@episodic/shared";
 import type { Dbs } from "../db.js";
 import { buildShowDetails } from "../show-details.js";
 import { toSearchResult } from "./search.js";

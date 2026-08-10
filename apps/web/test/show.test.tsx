@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { screen, fireEvent, waitFor } from "@testing-library/react";
-import type { ShowDetails } from "@scoretrack/shared";
+import type { ShowDetails } from "@episodic/shared";
 import { renderApp } from "./helpers";
 
 const details: ShowDetails = {
