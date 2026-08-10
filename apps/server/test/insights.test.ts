@@ -72,4 +72,24 @@ describe("computeInsights", () => {
     expect(i.goldenEra).toBeNull();
     expect(i.fallOffSeason).toBeNull();
   });
+  it("a null-average season breaks a golden era run, earlier tie wins", () => {
+    const i = computeInsights(grid([9.0, 9.2], [9.0, null], [9.0, 9.2]));
+    expect(i.goldenEra).toEqual({ from: 1, to: 1 });
+  });
+  it("fall-off skips a null-average drop season and detects at the next averaged one", () => {
+    const i = computeInsights(grid([9, 9.2], [9.1, 9.3], [6.0, null], [6.0, 6.2]));
+    expect(i.fallOffSeason).toBe(4);
+  });
+  it("trajectory uses first and last defined averages across a null edge season", () => {
+    const i = computeInsights(grid([9, null], [8.0, 8.2], [9.0, 9.2]));
+    expect(i.trajectory).toBe("rising");
+  });
+  it("empty seasons array returns empty and null results without crashing", () => {
+    const i = computeInsights([]);
+    expect(i.seasonAverages).toEqual([]);
+    expect(i.weightedAverage).toBeNull();
+    expect(i.goldenEra).toBeNull();
+    expect(i.fallOffSeason).toBeNull();
+    expect(i.trajectory).toBeNull();
+  });
 });
