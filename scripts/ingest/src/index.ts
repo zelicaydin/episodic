@@ -1,4 +1,4 @@
-import { existsSync } from "node:fs";
+import { existsSync, statSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { downloadFile } from "./download.js";
 import { buildDatabase } from "./build-db.js";
@@ -24,6 +24,9 @@ try {
     paths[key] = dest;
     if (cached && existsSync(dest)) {
       console.log(`using cached ${name}`);
+      if (key === "ratings") {
+        datasetDate = statSync(dest).mtime.toISOString().slice(0, 10);
+      }
       continue;
     }
     step = `download ${name}`;
