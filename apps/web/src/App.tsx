@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getStatus } from "./api";
 import { Home } from "./pages/Home";
 import { Show } from "./pages/Show";
+import { Compare } from "./pages/Compare";
 
 function Shell() {
   const status = useQuery({ queryKey: ["status"], queryFn: getStatus });
@@ -34,7 +35,7 @@ export default function App() {
       <Route element={<Shell />}>
         <Route path="/" element={<Home />} />
         <Route path="/show/:tconst" element={<Show />} />
-        <Route path="/compare" element={<div>Compare</div>} />
+        <Route path="/compare" element={<Compare />} />
         <Route path="/my" element={<div>My Shows</div>} />
       </Route>
     </Routes>

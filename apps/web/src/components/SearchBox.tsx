@@ -3,9 +3,9 @@ import { useNavigate } from "react-router-dom";
 import type { SearchResult } from "@scoretrack/shared";
 import { ApiError, search } from "../api";
 
-interface Props { autoFocus?: boolean; onNotIngested?: () => void; }
+interface Props { autoFocus?: boolean; onNotIngested?: () => void; onPick?: (r: SearchResult) => void; }
 
-export function SearchBox({ autoFocus = false, onNotIngested }: Props) {
+export function SearchBox({ autoFocus = false, onNotIngested, onPick }: Props) {
   const [q, setQ] = useState("");
   const [results, setResults] = useState<SearchResult[]>([]);
   const [open, setOpen] = useState(false);
@@ -30,7 +30,11 @@ export function SearchBox({ autoFocus = false, onNotIngested }: Props) {
     return () => clearTimeout(timer);
   }, [q, onNotIngested]);
 
-  function pick(r: SearchResult) { setOpen(false); setQ(""); nav(`/show/${r.tconst}`); }
+  function pick(r: SearchResult) {
+    setOpen(false);
+    if (onPick) { setQ(r.title); onPick(r); return; }
+    setQ(""); nav(`/show/${r.tconst}`);
+  }
 
   return (
     <div className="relative w-full max-w-xl">
