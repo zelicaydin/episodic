@@ -1,6 +1,7 @@
 import { Link, Outlet, Route, Routes } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { getStatus } from "./api";
+import { Home } from "./pages/Home";
 
 function Shell() {
   const status = useQuery({ queryKey: ["status"], queryFn: getStatus });
@@ -30,7 +31,7 @@ export default function App() {
   return (
     <Routes>
       <Route element={<Shell />}>
-        <Route path="/" element={<div>Home</div>} />
+        <Route path="/" element={<Home />} />
         <Route path="/show/:tconst" element={<div>Show</div>} />
         <Route path="/compare" element={<div>Compare</div>} />
         <Route path="/my" element={<div>My Shows</div>} />
