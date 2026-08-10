@@ -3,7 +3,8 @@ import { formatWatchTime } from "../lib/format";
 import { VerdictBox } from "./VerdictBox";
 
 function fmtVotes(v: number): string {
-  if (v >= 1_000_000) return `${(v / 1_000_000).toFixed(1)}M`;
+  // 999_500 threshold: anything that would round to 1000k renders as M instead
+  if (v >= 999_500) return `${(v / 1_000_000).toFixed(1)}M`;
   if (v >= 1_000) return `${Math.round(v / 1_000)}k`;
   return String(v);
 }
