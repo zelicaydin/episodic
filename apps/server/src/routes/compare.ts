@@ -9,10 +9,10 @@ export function compareRoutes(dbs: Dbs, getTmdb: (tconst: string) => Promise<{ p
     if (dbs.imdb === null) return c.json({ error: "not_ingested" }, 503);
     const a = c.req.query("a");
     const b = c.req.query("b");
-    if (!a || !b) return c.json({ error: "bad_request" }, 400);
-    const da = buildShowDetails(dbs, a, await getTmdb(a));
-    const db = buildShowDetails(dbs, b, await getTmdb(b));
-    if (da === null || db === null) return c.json({ error: "not_found" }, 404);
+    if (!a && !b) return c.json({ error: "bad_request" }, 400);
+    const da = a ? buildShowDetails(dbs, a, await getTmdb(a)) : null;
+    const db = b ? buildShowDetails(dbs, b, await getTmdb(b)) : null;
+    if ((a && da === null) || (b && db === null)) return c.json({ error: "not_found" }, 404);
     const body: CompareResponse = { a: da, b: db };
     return c.json(body);
   });

@@ -42,7 +42,7 @@ export interface ShowDetails {
   seasons: SeasonGrid[]; insights: Insights;
 }
 
-export interface CompareResponse { a: ShowDetails; b: ShowDetails; }
+export interface CompareResponse { a: ShowDetails | null; b: ShowDetails | null; }
 
 export interface StatusResponse {
   ingested: boolean; datasetDate: string | null;

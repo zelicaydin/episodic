@@ -27,10 +27,19 @@ beforeEach(() => {
   vi.stubGlobal("fetch", vi.fn(async (url: string) => {
     const u = String(url);
     if (u.includes("/api/compare")) {
-      return new Response(JSON.stringify({
-        a: { ...mkShow("tt10", "Fake Show"), poster: "https://m/fake.jpg" },
-        b: mkShow("tt30", "Tiny Gem"),
-      }));
+      if (u.includes("a=") && u.includes("b=")) {
+        return new Response(JSON.stringify({
+          a: { ...mkShow("tt10", "Fake Show"), poster: "https://m/fake.jpg" },
+          b: mkShow("tt30", "Tiny Gem"),
+        }));
+      }
+      if (u.includes("a=tt10")) {
+        return new Response(JSON.stringify({
+          a: { ...mkShow("tt10", "Fake Show"), poster: "https://m/fake.jpg" },
+          b: null,
+        }));
+      }
+      return new Response(JSON.stringify({ a: null, b: null }));
     }
     if (u.includes("/api/search")) {
       return new Response(JSON.stringify([
@@ -68,5 +77,11 @@ describe("Compare page", () => {
     expect(input.value).toBe("Tiny Gem");
     await new Promise((r) => setTimeout(r, 350));
     expect(screen.queryByRole("button", { name: /Tiny Gem/ })).toBeNull();
+  });
+  it("previews a single show once the first pick is made", async () => {
+    renderApp("/compare?a=tt10");
+    expect(await screen.findByText("Fake Show")).toBeDefined();
+    expect(screen.getByText(/pick a second show/i)).toBeDefined();
+    expect(screen.getAllByText("9.1").length).toBe(1);
   });
 });
