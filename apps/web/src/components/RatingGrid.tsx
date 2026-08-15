@@ -11,17 +11,17 @@ export function RatingGrid({ seasons, showSeasonAvg, watchMode, onToggleWatched 
   const rows = Array.from({ length: maxEp }, (_, i) => i + 1);
   return (
     <div className="overflow-x-auto">
-      <table className="border-separate" style={{ borderSpacing: 5 }}>
+      <table className="border-separate" style={{ borderSpacing: 7 }}>
         <thead>
           <tr style={{ color: "var(--muted)" }}>
             <th></th>
-            {seasons.map((s) => <th key={s.season} className="px-2 text-sm">S{s.season}</th>)}
+            {seasons.map((s) => <th key={s.season} className="px-2 text-base">S{s.season}</th>)}
           </tr>
         </thead>
         <tbody>
           {rows.map((epNum) => (
             <tr key={epNum}>
-              <td className="pr-2 text-sm" style={{ color: "var(--muted)" }}>E{epNum}</td>
+              <td className="pr-2 text-base" style={{ color: "var(--muted)" }}>E{epNum}</td>
               {seasons.map((s) => {
                 const ep = s.episodes.find((e) => e.episode === epNum);
                 return (

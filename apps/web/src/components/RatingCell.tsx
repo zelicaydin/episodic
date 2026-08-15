@@ -12,7 +12,7 @@ export function RatingCell({ ep, watchMode, onToggleWatched }: Props) {
     ? { background: tier.bg, color: tier.text, fontWeight: tier.standout ? 700 : 400 }
     : { background: "#27272a", color: "var(--muted)" };
   const content = (
-    <span title={tooltip} className="block rounded-md px-3 py-2 text-center text-sm" style={style}>
+    <span title={tooltip} className="block rounded-md px-4 py-3 text-center text-base" style={style}>
       {ep.watched ? "✓ " : ""}{ep.rating ?? ""}
     </span>
   );
