@@ -14,6 +14,17 @@ export function pickVerdict(i: Signals, tconst: string): string {
   const era = i.goldenEra;
   const eraStr = era ? (era.from === era.to ? `S${era.from}` : `S${era.from} to S${era.to}`) : "";
 
+  const defined = (xs: (number | null)[]) => xs.filter((a): a is number => a !== null);
+  const mean = (xs: number[]) => (xs.length === 0 ? null : xs.reduce((a, b) => a + b, 0) / xs.length);
+  const inEra = era ? defined(i.seasonAverages.filter((s) => s.season >= era.from && s.season <= era.to).map((s) => s.average)) : [];
+  const afterEra = era ? defined(i.seasonAverages.filter((s) => s.season > era.to).map((s) => s.average)) : [];
+  const beforeEra = era ? defined(i.seasonAverages.filter((s) => s.season < era.from).map((s) => s.average)) : [];
+  const eraMean = mean(inEra);
+  const afterMean = mean(afterEra);
+  const beforeMean = mean(beforeEra);
+  // a decline only counts as a real drop-off at half a point or more
+  const MEANINGFUL = 0.5;
+
   if (i.weightedAverage === null) {
     return pick(tconst, [
       "Not enough ratings yet to judge this one.",
@@ -41,18 +52,27 @@ export function pickVerdict(i: Signals, tconst: string): string {
       "In and out with zero filler. A clean binge.",
     ]);
   }
-  if (era && era.to === last && era.from > 1) {
+  if (era && era.to === last && era.from > 1
+    && eraMean !== null && beforeMean !== null && eraMean - beforeMean >= MEANINGFUL) {
     return pick(tconst, [
       `A late bloomer: it finds its stride in ${eraStr}.`,
       `Stick with it, the best stretch is ${eraStr}.`,
       `Slow start, strong finish: the payoff lives in ${eraStr}.`,
     ]);
   }
-  if (era && era.to < last) {
+  if (era && era.to < last
+    && eraMean !== null && afterMean !== null && eraMean - afterMean >= MEANINGFUL) {
     return pick(tconst, [
       `Peaks early: the golden era is ${eraStr}, then it coasts.`,
       `Best years up front (${eraStr}); temper expectations after.`,
       `The magic is front-loaded in ${eraStr}.`,
+    ]);
+  }
+  if (avgs.length >= 3 && Math.max(...avgs) - Math.min(...avgs) < 0.6) {
+    return pick(tconst, [
+      "Remarkably even: every season lands in the same range.",
+      "Steady throughout, with no weak stretch to skip.",
+      `No surprises in either direction: it holds around ${i.weightedAverage.toFixed(1)} the whole way.`,
     ]);
   }
   if (avgs.length >= 2 && Math.max(...avgs) - Math.min(...avgs) >= 1.2) {
