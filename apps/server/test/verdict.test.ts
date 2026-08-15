@@ -33,4 +33,26 @@ describe("pickVerdict", () => {
       goldenEra: null, seasonAverages: [{ season: 1, average: null }] }), "tt1");
     expect(v.toLowerCase()).toContain("not enough ratings");
   });
+  it("a slight decline is not called coasting", () => {
+    const v = pickVerdict(base({
+      seasonAverages: [{ season: 1, average: 8.6 }, { season: 2, average: 8.3 }, { season: 3, average: 8.2 }],
+      goldenEra: { from: 1, to: 1 }, weightedAverage: 8.37, fallOffSeason: null,
+    }), "tt2");
+    expect(v.toLowerCase()).not.toMatch(/coast|peaks early|temper expectations/i);
+    expect(v.toLowerCase()).toMatch(/even|steady|no surprises/i);
+  });
+  it("a genuine early peak still reads as one", () => {
+    const v = pickVerdict(base({
+      seasonAverages: [{ season: 1, average: 8.8 }, { season: 2, average: 8.7 }, { season: 3, average: 8.1 }, { season: 4, average: 8.15 }],
+      goldenEra: { from: 1, to: 2 }, weightedAverage: 8.44, fallOffSeason: null,
+    }), "tt3");
+    expect(v.toLowerCase()).toMatch(/peak|up front|golden era/i);
+  });
+  it("a slight uptick is not called a late bloom", () => {
+    const v = pickVerdict(base({
+      seasonAverages: [{ season: 1, average: 8.2 }, { season: 2, average: 8.4 }, { season: 3, average: 8.6 }],
+      goldenEra: { from: 3, to: 3 }, weightedAverage: 8.4,
+    }), "tt4");
+    expect(v.toLowerCase()).not.toMatch(/late bloomer|finds its stride|stick with it/i);
+  });
 });

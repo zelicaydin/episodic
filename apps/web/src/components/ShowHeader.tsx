@@ -1,3 +1,4 @@
+import { useState } from "react";
 import type { ShowDetails } from "@episodic/shared";
 import { formatWatchTime } from "../lib/format";
 import { VerdictBox } from "./VerdictBox";
@@ -12,6 +13,7 @@ function fmtVotes(v: number): string {
 interface Props { show: ShowDetails; onSaveToggle: () => void; onRate: (r: number) => void; }
 
 export function ShowHeader({ show, onSaveToggle, onRate }: Props) {
+  const [expanded, setExpanded] = useState(false);
   const meta = [
     show.startYear === null ? null :
       `${show.startYear}${show.endYear !== show.startYear ? ` to ${show.endYear ?? "now"}` : ""}`,
@@ -31,6 +33,19 @@ export function ShowHeader({ show, onSaveToggle, onRate }: Props) {
         {show.rating !== null && (
           <div style={{ color: "var(--gold)" }}>★ {show.rating}{" "}
             <span className="text-xs" style={{ color: "var(--muted)" }}>{fmtVotes(show.votes)} votes</span>
+          </div>
+        )}
+        {typeof show.overview === "string" && show.overview.length > 0 && (
+          <div className="max-w-2xl">
+            <p className={`text-sm leading-relaxed ${expanded ? "" : "line-clamp-3"}`} style={{ color: "var(--muted)" }}>
+              {show.overview}
+            </p>
+            {show.overview.length > 240 && (
+              <button type="button" onClick={() => setExpanded(!expanded)}
+                className="text-xs" style={{ color: "var(--gold)" }}>
+                {expanded ? "Show less" : "Show more"}
+              </button>
+            )}
           </div>
         )}
         <VerdictBox verdict={show.insights.verdict} tone={show.insights.fallOffSeason === null ? "good" : "bad"} />
