@@ -23,10 +23,10 @@ export function ShowHeader({ show, onSaveToggle, onRate }: Props) {
   return (
     <div className="mb-7 flex items-start gap-5">
       {show.poster !== null
-        ? <img src={show.poster} alt="" className="w-24 rounded-lg" />
-        : <div className="h-36 w-24 shrink-0 rounded-lg" style={{ background: "var(--surface)" }} />}
+        ? <img src={show.poster} alt="" className="w-40 rounded-lg" />
+        : <div className="h-60 w-40 shrink-0 rounded-lg" style={{ background: "var(--surface)" }} />}
       <div className="flex flex-col gap-2.5">
-        <h1 className="text-2xl font-bold">{show.title}</h1>
+        <h1 className="text-3xl font-bold">{show.title}</h1>
         <div className="text-sm" style={{ color: "var(--muted)" }}>{meta.join("  ·  ")}</div>
         {show.rating !== null && (
           <div style={{ color: "var(--gold)" }}>★ {show.rating}{" "}
