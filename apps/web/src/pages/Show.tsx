@@ -11,6 +11,12 @@ import { ShowCard } from "../components/ShowCard";
 
 export function Show() {
   const { tconst = "" } = useParams();
+  // Keyed by tconst so navigating between shows remounts the page: per-show state
+  // (episode filter, watch mode, expanded description) must not leak across shows.
+  return <ShowPage key={tconst} tconst={tconst} />;
+}
+
+function ShowPage({ tconst }: { tconst: string }) {
   const qc = useQueryClient();
   const [seasonAvg, setSeasonAvg] = useState(true);
   const [watchMode, setWatchMode] = useState(false);

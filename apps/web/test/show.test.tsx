@@ -156,4 +156,31 @@ describe("Show page", () => {
     fireEvent.change(input, { target: { value: "pilot" } });
     expect(await screen.findByText(/1 of 62 episodes match/)).toBeDefined();
   });
+
+  it("resets per-show state when navigating to another show", async () => {
+    const long = { ...details, episodeCount: 62 };
+    const other = { ...details, tconst: "tt30", title: "Tiny Gem", episodeCount: 62 };
+    vi.stubGlobal("fetch", vi.fn(async (url: string) => {
+      const u = String(url);
+      if (u.includes("/api/shows/tt10/similar")) {
+        return new Response(JSON.stringify([
+          { tconst: "tt30", title: "Tiny Gem", startYear: 2020, endYear: 2020, rating: 8.6, votes: 900, poster: null },
+        ]));
+      }
+      if (u.includes("/api/shows/tt30/similar")) return new Response(JSON.stringify([]));
+      if (u.includes("/api/shows/tt30")) return new Response(JSON.stringify(other));
+      if (u.includes("/api/shows/tt10")) return new Response(JSON.stringify(long));
+      if (u.includes("/api/status")) return new Response(JSON.stringify({ ingested: true, datasetDate: "2026-08-15", showCount: 2, episodeCount: 124 }));
+      return new Response(JSON.stringify([]));
+    }));
+    renderApp("/show/tt10");
+    await screen.findByText("Fake Show");
+    const filter = screen.getByPlaceholderText(/filter episodes/i) as HTMLInputElement;
+    fireEvent.change(filter, { target: { value: "pilot" } });
+    expect(filter.value).toBe("pilot");
+    fireEvent.click(await screen.findByText("Tiny Gem"));
+    await screen.findByRole("heading", { name: "Tiny Gem" });
+    const nextFilter = screen.getByPlaceholderText(/filter episodes/i) as HTMLInputElement;
+    expect(nextFilter.value).toBe("");
+  });
 });
