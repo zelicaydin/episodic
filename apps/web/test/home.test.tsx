@@ -28,7 +28,7 @@ describe("Home", () => {
   it("shows trending shows", async () => {
     renderApp("/");
     expect(await screen.findByText("Fake Show")).toBeDefined();
-    expect(screen.getByText("Trending")).toBeDefined();
+    expect(screen.getByText("On the air now")).toBeDefined();
   });
   it("renders trending poster art", async () => {
     renderApp("/");

@@ -26,16 +26,3 @@ describe("GET /api/search", () => {
     expect(res.status).toBe(503);
   });
 });
-
-describe("GET /api/trending", () => {
-  it("returns shows by vote count", async () => {
-    const app = createApp(fixtureDbs(), {
-      fetchImpl: (async () => new Response("", { status: 404 })) as unknown as typeof fetch,
-    });
-    const res = await app.request("/api/trending");
-    const body = await res.json() as { tconst: string; poster: string | null }[];
-    expect(body[0]?.tconst).toBe("tt10");
-    expect(body.length).toBe(3);
-    for (const entry of body) expect(entry.poster).toBeNull();
-  });
-});

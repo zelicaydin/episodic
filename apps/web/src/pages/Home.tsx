@@ -28,7 +28,7 @@ export function Home() {
           <SearchBox autoFocus onNotIngested={() => setSearchNotIngested(true)} />
         </div>
       </div>
-      <h2 className="mb-3 text-lg font-semibold">Trending</h2>
+      <h2 className="mb-3 text-lg font-semibold">On the air now</h2>
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
         {(trending.data ?? []).map((s) => <ShowCard key={s.tconst} show={s} />)}
       </div>
