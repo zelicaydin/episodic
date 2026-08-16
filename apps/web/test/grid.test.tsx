@@ -15,12 +15,21 @@ describe("RatingGrid", () => {
     render(<RatingGrid seasons={seasons} showSeasonAvg watchMode={false} onToggleWatched={() => {}} />);
     expect(screen.getByText("9.1")).toBeDefined();
     expect(screen.getByText("8.7")).toBeDefined();
-    expect(screen.getByTitle(/S1E1 Pilot/)).toBeDefined();
+    expect(screen.getByLabelText(/S1E1 Pilot/)).toBeDefined();
   });
   it("watch mode clicks call onToggleWatched", () => {
     const spy = vi.fn();
     render(<RatingGrid seasons={seasons} showSeasonAvg={false} watchMode onToggleWatched={spy} />);
     fireEvent.click(screen.getByText("9.1"));
     expect(spy).toHaveBeenCalledWith(expect.objectContaining({ tconst: "tt11" }));
+  });
+  it("shows a hover card with the episode name on mouse enter, hides it on leave", () => {
+    render(<RatingGrid seasons={seasons} showSeasonAvg={false} watchMode={false} onToggleWatched={() => {}} />);
+    const cell = screen.getByText("9.1");
+    fireEvent.mouseEnter(cell);
+    const tip = screen.getByRole("tooltip");
+    expect(tip.textContent).toContain("Pilot");
+    fireEvent.mouseLeave(cell);
+    expect(screen.queryByRole("tooltip")).toBeNull();
   });
 });

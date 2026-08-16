@@ -134,7 +134,7 @@ describe("Show page", () => {
     fireEvent.click(screen.getByLabelText(/mark watched/i));
     fireEvent.click(screen.getByText("9.1"));
     await waitFor(() => {
-      expect(screen.getByTitle(/S1E1 Pilot/).textContent).toContain("✓");
+      expect(screen.getByLabelText(/S1E1 Pilot/).textContent).toContain("✓");
     });
   });
 });

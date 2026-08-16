@@ -1,9 +1,12 @@
 import type { EpisodeCell } from "@episodic/shared";
 import { tierFor } from "../lib/colors";
 
-interface Props { ep: EpisodeCell; watchMode: boolean; onToggleWatched: (ep: EpisodeCell) => void; }
+interface Props {
+  ep: EpisodeCell; watchMode: boolean; onToggleWatched: (ep: EpisodeCell) => void;
+  onHover?: (ep: EpisodeCell, rect: DOMRect) => void; onLeave?: () => void;
+}
 
-export function RatingCell({ ep, watchMode, onToggleWatched }: Props) {
+export function RatingCell({ ep, watchMode, onToggleWatched, onHover, onLeave }: Props) {
   const tier = tierFor(ep.rating);
   const tooltip = `S${ep.season}E${ep.episode}${ep.title ? " " + ep.title : ""}` +
     (ep.rating !== null ? `, ${ep.rating} (${ep.votes} votes)` : ", unrated") +
@@ -12,7 +15,9 @@ export function RatingCell({ ep, watchMode, onToggleWatched }: Props) {
     ? { background: tier.bg, color: tier.text, fontWeight: tier.standout ? 700 : 400 }
     : { background: "#27272a", color: "var(--muted)" };
   const content = (
-    <span title={tooltip} className="block rounded-md px-4 py-3 text-center text-base" style={style}>
+    <span aria-label={tooltip} className="block rounded-md px-4 py-3 text-center text-base" style={style}
+      onMouseEnter={(e) => onHover?.(ep, e.currentTarget.getBoundingClientRect())}
+      onMouseLeave={() => onLeave?.()}>
       {ep.watched ? "✓ " : ""}{ep.rating ?? ""}
     </span>
   );

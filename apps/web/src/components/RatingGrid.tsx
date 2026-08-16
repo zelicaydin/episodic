@@ -1,3 +1,4 @@
+import { useState } from "react";
 import type { EpisodeCell, SeasonGrid } from "@episodic/shared";
 import { RatingCell } from "./RatingCell";
 
@@ -7,6 +8,7 @@ interface Props {
 }
 
 export function RatingGrid({ seasons, showSeasonAvg, watchMode, onToggleWatched }: Props) {
+  const [hovered, setHovered] = useState<{ ep: EpisodeCell; rect: DOMRect } | null>(null);
   const maxEp = Math.max(0, ...seasons.map((s) => Math.max(0, ...s.episodes.map((e) => e.episode))));
   const rows = Array.from({ length: maxEp }, (_, i) => i + 1);
   return (
@@ -26,7 +28,10 @@ export function RatingGrid({ seasons, showSeasonAvg, watchMode, onToggleWatched 
                 const ep = s.episodes.find((e) => e.episode === epNum);
                 return (
                   <td key={s.season}>
-                    {ep && <RatingCell ep={ep} watchMode={watchMode} onToggleWatched={onToggleWatched} />}
+                    {ep && (
+                      <RatingCell ep={ep} watchMode={watchMode} onToggleWatched={onToggleWatched}
+                        onHover={(ep, rect) => setHovered({ ep, rect })} onLeave={() => setHovered(null)} />
+                    )}
                   </td>
                 );
               })}
@@ -44,6 +49,30 @@ export function RatingGrid({ seasons, showSeasonAvg, watchMode, onToggleWatched 
           )}
         </tbody>
       </table>
+      {hovered && (
+        <div
+          role="tooltip"
+          className="pointer-events-none fixed z-50 rounded-lg border px-3 py-2 shadow-lg"
+          style={{
+            background: "var(--surface)",
+            borderColor: "var(--border)",
+            left: Math.min(hovered.rect.left, window.innerWidth - 280),
+            top: hovered.rect.bottom + 8,
+            maxWidth: 260,
+          }}
+        >
+          <div className="text-sm font-semibold" style={{ color: "var(--text)" }}>
+            {hovered.ep.title ?? "Untitled episode"}
+          </div>
+          <div className="mt-0.5 text-xs" style={{ color: "var(--muted)" }}>
+            S{hovered.ep.season}E{hovered.ep.episode}
+            {hovered.ep.rating !== null
+              ? ` · ${hovered.ep.rating} · ${hovered.ep.votes.toLocaleString()} votes`
+              : " · unrated"}
+            {hovered.ep.watched ? " · watched" : ""}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
