@@ -5,9 +5,10 @@ import { RatingCell } from "./RatingCell";
 interface Props {
   seasons: SeasonGrid[]; showSeasonAvg: boolean; watchMode: boolean;
   onToggleWatched: (ep: EpisodeCell) => void;
+  filter?: string;
 }
 
-export function RatingGrid({ seasons, showSeasonAvg, watchMode, onToggleWatched }: Props) {
+export function RatingGrid({ seasons, showSeasonAvg, watchMode, onToggleWatched, filter = "" }: Props) {
   const [hovered, setHovered] = useState<{ ep: EpisodeCell; rect: DOMRect } | null>(null);
   const maxEp = Math.max(0, ...seasons.map((s) => Math.max(0, ...s.episodes.map((e) => e.episode))));
   const rows = Array.from({ length: maxEp }, (_, i) => i + 1);
@@ -30,7 +31,8 @@ export function RatingGrid({ seasons, showSeasonAvg, watchMode, onToggleWatched 
                   <td key={s.season}>
                     {ep && (
                       <RatingCell ep={ep} watchMode={watchMode} onToggleWatched={onToggleWatched}
-                        onHover={(ep, rect) => setHovered({ ep, rect })} onLeave={() => setHovered(null)} />
+                        onHover={(ep, rect) => setHovered({ ep, rect })} onLeave={() => setHovered(null)}
+                        dimmed={filter.trim() !== "" && !(ep.title ?? "").toLowerCase().includes(filter.trim().toLowerCase())} />
                     )}
                   </td>
                 );

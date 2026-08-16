@@ -137,4 +137,23 @@ describe("Show page", () => {
       expect(screen.getByLabelText(/S1E1 Pilot/).textContent).toContain("✓");
     });
   });
+  it("does not render the episode filter on short shows", async () => {
+    renderApp("/show/tt10");
+    await screen.findByText("Fake Show");
+    expect(screen.queryByPlaceholderText(/filter episodes/i)).toBeNull();
+  });
+  it("renders the episode filter and match count on long-running shows", async () => {
+    const longRunning: ShowDetails = { ...details, episodeCount: 62 };
+    vi.stubGlobal("fetch", vi.fn(async (url: string) => {
+      const u = String(url);
+      if (u.includes("/api/shows/tt10")) return new Response(JSON.stringify(longRunning));
+      if (u.includes("/api/status")) return new Response(JSON.stringify({ ingested: true, datasetDate: null, showCount: 1, episodeCount: 62 }));
+      return new Response(JSON.stringify([]));
+    }));
+    renderApp("/show/tt10");
+    await screen.findByText("Fake Show");
+    const input = screen.getByPlaceholderText(/filter episodes/i);
+    fireEvent.change(input, { target: { value: "pilot" } });
+    expect(await screen.findByText(/1 of 62 episodes match/)).toBeDefined();
+  });
 });

@@ -14,6 +14,7 @@ export function Show() {
   const qc = useQueryClient();
   const [seasonAvg, setSeasonAvg] = useState(true);
   const [watchMode, setWatchMode] = useState(false);
+  const [episodeFilter, setEpisodeFilter] = useState("");
   const q = useQuery({ queryKey: ["show", tconst], queryFn: () => getShow(tconst) });
   const similar = useQuery({ queryKey: ["similar", tconst], queryFn: () => getSimilar(tconst) });
   const invalidate = () => qc.invalidateQueries({ queryKey: ["show", tconst] });
@@ -43,16 +44,35 @@ export function Show() {
   if (q.error) return <p style={{ color: "var(--bad)" }}>Something went wrong loading this show.</p>;
   if (q.data === undefined) return <p style={{ color: "var(--muted)" }}>Loading...</p>;
   const show = q.data;
+  const filterActive = episodeFilter.trim() !== "";
+  const matchCount = filterActive
+    ? show.seasons.reduce((n, s) => n + s.episodes.filter((e) =>
+        (e.title ?? "").toLowerCase().includes(episodeFilter.trim().toLowerCase())).length, 0)
+    : 0;
 
   return (
     <div>
       <ShowHeader show={show} onSaveToggle={() => save.mutate()} onRate={(r) => rate.mutate(r)} />
-      <div className="mb-3 flex gap-5 text-sm" style={{ color: "var(--muted)" }}>
+      <div className="mb-3 flex flex-wrap items-center gap-5 text-sm" style={{ color: "var(--muted)" }}>
         <label><input type="checkbox" checked={seasonAvg} onChange={(e) => setSeasonAvg(e.target.checked)} /> Season averages</label>
         <label><input type="checkbox" checked={watchMode} onChange={(e) => setWatchMode(e.target.checked)} /> Mark watched</label>
+        {show.episodeCount > 30 && (
+          <input
+            value={episodeFilter}
+            onChange={(e) => setEpisodeFilter(e.target.value)}
+            placeholder="Filter episodes by name..."
+            className="rounded-lg border bg-transparent px-3 py-1 text-sm outline-none"
+            style={{ borderColor: "var(--border)", minWidth: "16rem" }}
+          />
+        )}
       </div>
       <RatingGrid seasons={show.seasons} showSeasonAvg={seasonAvg}
-        watchMode={watchMode} onToggleWatched={(ep) => watch.mutate(ep)} />
+        watchMode={watchMode} onToggleWatched={(ep) => watch.mutate(ep)} filter={episodeFilter} />
+      {filterActive && (
+        <p className="mt-2 text-xs" style={{ color: "var(--muted)" }}>
+          {matchCount} of {show.episodeCount} episodes match
+        </p>
+      )}
       <ColorKey />
       {show.unplacedCount > 0 && (
         <p className="mt-3 text-xs" style={{ color: "var(--muted)" }}>
