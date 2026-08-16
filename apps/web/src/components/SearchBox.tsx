@@ -3,9 +3,9 @@ import { useNavigate } from "react-router-dom";
 import type { SearchResult } from "@episodic/shared";
 import { ApiError, search } from "../api";
 
-interface Props { autoFocus?: boolean; onNotIngested?: () => void; onPick?: (r: SearchResult) => void; }
+interface Props { autoFocus?: boolean; compact?: boolean; onNotIngested?: () => void; onPick?: (r: SearchResult) => void; }
 
-export function SearchBox({ autoFocus = false, onNotIngested, onPick }: Props) {
+export function SearchBox({ autoFocus = false, compact = false, onNotIngested, onPick }: Props) {
   const [q, setQ] = useState("");
   const [results, setResults] = useState<SearchResult[]>([]);
   const [open, setOpen] = useState(false);
@@ -46,7 +46,7 @@ export function SearchBox({ autoFocus = false, onNotIngested, onPick }: Props) {
   }
 
   return (
-    <div className="relative w-full max-w-xl">
+    <div className={compact ? "relative w-64" : "relative w-full max-w-xl"}>
       <input
         autoFocus={autoFocus} value={q} placeholder="Search for a show..."
         onChange={(e) => setQ(e.target.value)}
@@ -57,7 +57,9 @@ export function SearchBox({ autoFocus = false, onNotIngested, onPick }: Props) {
           if (e.key === "Enter" && results[sel]) pick(results[sel]);
           if (e.key === "Escape") setOpen(false);
         }}
-        className="w-full rounded-lg border bg-transparent px-4 py-2.5 outline-none"
+        className={compact
+          ? "w-full rounded-lg border bg-transparent px-3 py-1.5 text-sm outline-none"
+          : "w-full rounded-lg border bg-transparent px-4 py-2.5 outline-none"}
         style={{ borderColor: "var(--border)" }}
       />
       {open && results.length > 0 && (
