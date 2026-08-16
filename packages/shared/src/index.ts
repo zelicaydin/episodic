@@ -6,6 +6,8 @@ export interface SearchResult {
 
 export interface TrendingEntry extends SearchResult { poster: string | null; }
 
+export interface SimilarShow extends SearchResult { poster: string | null; }
+
 export interface EpisodeCell {
   tconst: string; season: number; episode: number;
   title: string | null; rating: number | null; votes: number;

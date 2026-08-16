@@ -1,5 +1,6 @@
 import type {
   StatusResponse, SearchResult, ShowDetails, CompareResponse, MyShowEntry, OkResponse, TrendingEntry,
+  SimilarShow,
 } from "@episodic/shared";
 
 export class ApiError extends Error {
@@ -25,6 +26,7 @@ export const getStatus = () => req<StatusResponse>("/api/status");
 export const search = (q: string) => req<SearchResult[]>(`/api/search?q=${encodeURIComponent(q)}`);
 export const getTrending = () => req<TrendingEntry[]>("/api/trending");
 export const getShow = (tconst: string) => req<ShowDetails>(`/api/shows/${tconst}`);
+export const getSimilar = (tconst: string) => req<SimilarShow[]>(`/api/shows/${tconst}/similar`);
 export const getCompare = (a: string | null, b: string | null) => {
   const qs = new URLSearchParams();
   if (a) qs.set("a", a);

@@ -2,11 +2,12 @@ import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { EpisodeCell, ShowDetails } from "@episodic/shared";
-import { ApiError, getShow, saveShow, setMyRating, setWatched, unsaveShow } from "../api";
+import { ApiError, getShow, getSimilar, saveShow, setMyRating, setWatched, unsaveShow } from "../api";
 import { ShowHeader } from "../components/ShowHeader";
 import { RatingGrid } from "../components/RatingGrid";
 import { ColorKey } from "../components/ColorKey";
 import { SetupCard } from "../components/SetupCard";
+import { ShowCard } from "../components/ShowCard";
 
 export function Show() {
   const { tconst = "" } = useParams();
@@ -14,6 +15,7 @@ export function Show() {
   const [seasonAvg, setSeasonAvg] = useState(true);
   const [watchMode, setWatchMode] = useState(false);
   const q = useQuery({ queryKey: ["show", tconst], queryFn: () => getShow(tconst) });
+  const similar = useQuery({ queryKey: ["similar", tconst], queryFn: () => getSimilar(tconst) });
   const invalidate = () => qc.invalidateQueries({ queryKey: ["show", tconst] });
 
   const save = useMutation({
@@ -56,6 +58,14 @@ export function Show() {
         <p className="mt-3 text-xs" style={{ color: "var(--muted)" }}>
           {show.unplacedCount} specials or unplaced episodes not shown
         </p>
+      )}
+      {(similar.data ?? []).length > 0 && (
+        <>
+          <h2 className="mt-10 mb-3 text-lg font-semibold">Similar shows</h2>
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+            {(similar.data ?? []).map((s) => <ShowCard key={s.tconst} show={s} />)}
+          </div>
+        </>
       )}
     </div>
   );

@@ -24,9 +24,16 @@ const details: ShowDetails = {
   },
 };
 
+const similarEntry = {
+  tconst: "tt30", title: "Tiny Gem", startYear: 2020, endYear: 2020,
+  rating: 8.6, votes: 900, poster: "https://m/tg.jpg",
+};
+
 beforeEach(() => {
   vi.stubGlobal("fetch", vi.fn(async (url: string, init?: RequestInit) => {
     const u = String(url);
+    // Order matters: the /similar suffix must be matched before the plain detail path.
+    if (u.includes("/api/shows/tt10/similar")) return new Response(JSON.stringify([similarEntry]));
     if (u.includes("/api/shows/tt10")) return new Response(JSON.stringify(details));
     if (u.includes("/api/status")) return new Response(JSON.stringify({ ingested: true, datasetDate: "2026-08-10", showCount: 1, episodeCount: 4 }));
     if (u.includes("/api/my/")) return new Response(JSON.stringify({ ok: true }));
@@ -45,6 +52,12 @@ describe("Show page", () => {
     expect(screen.getByText("color key")).toBeDefined();
     expect(screen.getByText(/1 specials or unplaced/)).toBeDefined();
     expect(screen.getByText(/120k votes/)).toBeDefined();
+  });
+  it("renders similar shows below the color key", async () => {
+    renderApp("/show/tt10");
+    await screen.findByText("Fake Show");
+    expect(await screen.findByText("Similar shows")).toBeDefined();
+    expect(await screen.findByText("Tiny Gem")).toBeDefined();
   });
   it("save button posts to the api", async () => {
     renderApp("/show/tt10");
