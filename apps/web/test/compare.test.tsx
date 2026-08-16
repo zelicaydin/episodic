@@ -70,7 +70,8 @@ describe("Compare page", () => {
   });
   it("closes the dropdown after picking a result and does not reopen it", async () => {
     renderApp("/compare");
-    const input = screen.getAllByPlaceholderText(/search/i)[0] as HTMLInputElement;
+    // Index 0 is the compact nav search box (shown on every non-home page); index 1 is the compare page's first pick.
+    const input = screen.getAllByPlaceholderText(/search/i)[1] as HTMLInputElement;
     fireEvent.change(input, { target: { value: "tiny" } });
     const option = await screen.findByRole("button", { name: /Tiny Gem/ });
     fireEvent.click(option);
